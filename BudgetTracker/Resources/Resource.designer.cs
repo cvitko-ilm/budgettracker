@@ -26,8 +26,6 @@ namespace BudgetTracker
 		
 		public static void UpdateIdValues()
 		{
-			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::BudgetTracker.Resource.String.ApplicationName;
-			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::BudgetTracker.Resource.String.Hello;
 		}
 		
 		public partial class Animation
@@ -2651,20 +2649,14 @@ namespace BudgetTracker
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f0b0018
-			public const int ApplicationName = 2131427352;
+			// aapt resource value: 0x7f0b001a
+			public const int DrawerCloseDescription = 2131427354;
+			
+			// aapt resource value: 0x7f0b0019
+			public const int DrawerOpenDescription = 2131427353;
 			
 			// aapt resource value: 0x7f0b001c
-			public const int DrawerCloseDescription = 2131427356;
-			
-			// aapt resource value: 0x7f0b001b
-			public const int DrawerOpenDescription = 2131427355;
-			
-			// aapt resource value: 0x7f0b0017
-			public const int Hello = 2131427351;
-			
-			// aapt resource value: 0x7f0b001e
-			public const int TransactionSaved = 2131427358;
+			public const int TransactionSaved = 2131427356;
 			
 			// aapt resource value: 0x7f0b0003
 			public const int abc_action_bar_home_description = 2131427331;
@@ -2723,8 +2715,8 @@ namespace BudgetTracker
 			// aapt resource value: 0x7f0b0015
 			public const int abc_toolbar_collapse_description = 2131427349;
 			
-			// aapt resource value: 0x7f0b001a
-			public const int app_name = 2131427354;
+			// aapt resource value: 0x7f0b0018
+			public const int app_name = 2131427352;
 			
 			// aapt resource value: 0x7f0b0000
 			public const int appbar_scrolling_view_behavior = 2131427328;
@@ -2732,80 +2724,80 @@ namespace BudgetTracker
 			// aapt resource value: 0x7f0b0001
 			public const int bottom_sheet_behavior = 2131427329;
 			
-			// aapt resource value: 0x7f0b002b
-			public const int cancel = 2131427371;
+			// aapt resource value: 0x7f0b0029
+			public const int cancel = 2131427369;
 			
-			// aapt resource value: 0x7f0b0026
-			public const int categories = 2131427366;
+			// aapt resource value: 0x7f0b0024
+			public const int categories = 2131427364;
 			
-			// aapt resource value: 0x7f0b0031
-			public const int categoryDeleted = 2131427377;
+			// aapt resource value: 0x7f0b002f
+			public const int categoryDeleted = 2131427375;
 			
-			// aapt resource value: 0x7f0b001d
-			public const int category_prompt = 2131427357;
+			// aapt resource value: 0x7f0b001b
+			public const int category_prompt = 2131427355;
 			
 			// aapt resource value: 0x7f0b0002
 			public const int character_counter_pattern = 2131427330;
 			
-			// aapt resource value: 0x7f0b0029
-			public const int clear = 2131427369;
+			// aapt resource value: 0x7f0b0027
+			public const int clear = 2131427367;
 			
-			// aapt resource value: 0x7f0b0033
-			public const int confirmDeleteMessage = 2131427379;
+			// aapt resource value: 0x7f0b0031
+			public const int confirmDeleteMessage = 2131427377;
 			
-			// aapt resource value: 0x7f0b0032
-			public const int confirmDeleteTitle = 2131427378;
-			
-			// aapt resource value: 0x7f0b002a
-			public const int delete = 2131427370;
-			
-			// aapt resource value: 0x7f0b002e
-			public const int description = 2131427374;
-			
-			// aapt resource value: 0x7f0b002c
-			public const int edit = 2131427372;
-			
-			// aapt resource value: 0x7f0b0019
-			public const int hello = 2131427353;
-			
-			// aapt resource value: 0x7f0b002f
-			public const int name = 2131427375;
+			// aapt resource value: 0x7f0b0030
+			public const int confirmDeleteTitle = 2131427376;
 			
 			// aapt resource value: 0x7f0b0028
-			public const int navigationHeader = 2131427368;
+			public const int delete = 2131427368;
 			
-			// aapt resource value: 0x7f0b0027
-			public const int reports = 2131427367;
+			// aapt resource value: 0x7f0b002c
+			public const int description = 2131427372;
+			
+			// aapt resource value: 0x7f0b002a
+			public const int edit = 2131427370;
+			
+			// aapt resource value: 0x7f0b0017
+			public const int hello = 2131427351;
 			
 			// aapt resource value: 0x7f0b002d
-			public const int save = 2131427373;
+			public const int name = 2131427373;
 			
-			// aapt resource value: 0x7f0b0023
-			public const int saveTransaction = 2131427363;
+			// aapt resource value: 0x7f0b0026
+			public const int navigationHeader = 2131427366;
+			
+			// aapt resource value: 0x7f0b0025
+			public const int reports = 2131427365;
+			
+			// aapt resource value: 0x7f0b002b
+			public const int save = 2131427371;
+			
+			// aapt resource value: 0x7f0b0021
+			public const int saveTransaction = 2131427361;
 			
 			// aapt resource value: 0x7f0b0016
 			public const int status_bar_notification_info_overflow = 2131427350;
 			
+			// aapt resource value: 0x7f0b001d
+			public const int transactionAmountHint = 2131427357;
+			
+			// aapt resource value: 0x7f0b0023
+			public const int transactionEntry = 2131427363;
+			
 			// aapt resource value: 0x7f0b001f
-			public const int transactionAmountHint = 2131427359;
+			public const int transactionIncorrectFormat = 2131427359;
 			
-			// aapt resource value: 0x7f0b0025
-			public const int transactionEntry = 2131427365;
-			
-			// aapt resource value: 0x7f0b0021
-			public const int transactionIncorrectFormat = 2131427361;
-			
-			// aapt resource value: 0x7f0b0020
-			public const int transactionVendorHint = 2131427360;
-			
-			// aapt resource value: 0x7f0b0024
-			public const int transactions = 2131427364;
-			
-			// aapt resource value: 0x7f0b0030
-			public const int undo = 2131427376;
+			// aapt resource value: 0x7f0b001e
+			public const int transactionVendorHint = 2131427358;
 			
 			// aapt resource value: 0x7f0b0022
-			public const int vendorRequired = 2131427362;
+			public const int transactions = 2131427362;
+			
+			// aapt resource value: 0x7f0b002e
+			public const int undo = 2131427374;
+			
+			// aapt resource value: 0x7f0b0020
+			public const int vendorRequired = 2131427360;
 			
 			static String()
 			{

@@ -10,8 +10,6 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using System.IO;
 using SQLite;
-using SQLite.Net.Async;
-using SQLite.Net;
 
 namespace BudgetTracker
 {
@@ -148,9 +146,7 @@ namespace BudgetTracker
 		private SQLiteAsyncConnection GetSqliteDatabaseConn()
 		{
 			if (_dbConn == null) {
-				var platform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid ();
-				var param = new SQLiteConnectionString (Path.Combine(libraryPath, sqliteFilename), false);
-				_dbConn = new SQLiteAsyncConnection (() => new SQLiteConnectionWithLock (platform, param));
+				_dbConn = new SQLiteAsyncConnection (Path.Combine (libraryPath, sqliteFilename));
 			}
 			return _dbConn;
 		}

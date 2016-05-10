@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SQLite.Net.Async;
+using SQLite;
 
 namespace BudgetTracker
 {
@@ -15,7 +15,7 @@ namespace BudgetTracker
 		public CategoryService (SQLiteAsyncConnection dbConn)
 		{
 			_dbConn = dbConn;
-			this.CreateTableData ();
+			this.CreateTableData ().Wait();
 		}
 
 		public Task CreateTableData ()
