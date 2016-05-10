@@ -17,10 +17,9 @@ namespace BudgetTracker
 		private RecyclerView recyclerView;
 		private CategoryService dataService;
 
-		public CategoriesAdapter (CategoryService dataService, CategoryTypeService categoryTypeService, InputUtilities inputUtilities)
+		public CategoriesAdapter (IEnumerable<Category> categories, CategoryTypeService categoryTypeService, InputUtilities inputUtilities)
 		{
-			this.dataService = dataService;
-			this.items = this.dataService.RetrieveCategories ();
+			this.items = categories.ToList();
 			this.categoryTypes = categoryTypeService.RetrieveCategoryTypes ();
 			this.categoryTypeNames = this.categoryTypes.Select (x => Enum.GetName(typeof(CategoryType), x)).ToArray();
 			this.inputUtilities = inputUtilities;

@@ -8,6 +8,10 @@ using Android.Views;
 using Android.Support.V7.App;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
+using System.IO;
+using SQLite;
+using SQLite.Net.Async;
+using SQLite.Net;
 
 namespace BudgetTracker
 {
@@ -22,6 +26,10 @@ namespace BudgetTracker
 		private int currentNavigationItem = 0;
 		private const string SelectedNavigationIndex = "SelectedNavigationIndex";
 		private InputUtilities inputUtilities;
+
+		private string sqliteFilename = "MyDatabase.db3";
+		private string libraryPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+		private SQLiteAsyncConnection _dbConn { get; set;}
 
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
@@ -52,7 +60,7 @@ namespace BudgetTracker
 				this.currentNavigationItem = savedInstanceState.GetInt(SelectedNavigationIndex);
 				this.Title = this.GetString(this.titleResources [this.currentNavigationItem]);
 			} else {
-				this.SetFragment (new TransactionEntryFragment (new TransactionService(), new CategoryService (), this.inputUtilities), 0);
+				this.SetFragment (new TransactionEntryFragment (new TransactionService(), new CategoryService (GetSqliteDatabaseConn ()), this.inputUtilities), 0);
 			}
 		}
 
@@ -86,16 +94,16 @@ namespace BudgetTracker
 			switch (e.MenuItem.ItemId)
 			{
 				case Resource.Id.nav_reports:
-					fragment = new ReportsFragment (new TransactionService(), new CategoryService ());
+					fragment = new ReportsFragment (new TransactionService());
 					this.currentNavigationItem = 2;
 					break;
 				case Resource.Id.nav_categories:
-				fragment = new CategoriesFragment (new CategoryService (), new CategoryTypeService (), this.inputUtilities);
+				fragment = new CategoriesFragment (new CategoryService (GetSqliteDatabaseConn ()), new CategoryTypeService (), this.inputUtilities);
 					this.currentNavigationItem = 1;
 					break;
 				case Resource.Id.nav_transactions:
 				default:
-				fragment = new TransactionEntryFragment (new TransactionService(), new CategoryService (), this.inputUtilities);
+				fragment = new TransactionEntryFragment (new TransactionService(), new CategoryService (GetSqliteDatabaseConn ()), this.inputUtilities);
 					this.currentNavigationItem = 0;
 					break;
 			}
@@ -135,6 +143,16 @@ namespace BudgetTracker
 		{
 			this.FragmentManager.BeginTransaction ().Replace (Resource.Id.frameLayout, fragment).Commit ();
 			this.Title = this.GetString(this.titleResources [index]);
+		}
+
+		private SQLiteAsyncConnection GetSqliteDatabaseConn()
+		{
+			if (_dbConn == null) {
+				var platform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid ();
+				var param = new SQLiteConnectionString (Path.Combine(libraryPath, sqliteFilename), false);
+				_dbConn = new SQLiteAsyncConnection (() => new SQLiteConnectionWithLock (platform, param));
+			}
+			return _dbConn;
 		}
 	}
 }

@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker", "BudgetTrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedPCL", "SharedPCL\SharedPCL.csproj", "{8A671289-B506-4AB7-8E5D-963025979446}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServicesPCL", "DataServicesPCL\DataServicesPCL.csproj", "{9F22E00B-DB62-4FFE-B268-006DF6A842D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{8A671289-B506-4AB7-8E5D-963025979446}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A671289-B506-4AB7-8E5D-963025979446}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A671289-B506-4AB7-8E5D-963025979446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F22E00B-DB62-4FFE-B268-006DF6A842D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F22E00B-DB62-4FFE-B268-006DF6A842D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F22E00B-DB62-4FFE-B268-006DF6A842D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F22E00B-DB62-4FFE-B268-006DF6A842D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

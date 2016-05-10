@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Widget;
 using Android.Support.V7.Widget;
 using Android.Support.Design.Widget;
+using System.Collections.Generic;
 
 namespace BudgetTracker
 {
@@ -15,10 +16,8 @@ namespace BudgetTracker
 		private CategoryService categoryService;
 		private CategoryTypeService categoryTypeService;
 		private InputUtilities inputUtilities;
-
-		public CategoriesFragment() : this(new CategoryService(), new CategoryTypeService(), new InputUtilities())
-		{
-		}
+		private RecyclerView.Adapter categoriesAdapter;
+		private IEnumerable<Category> categories;
 
 		public CategoriesFragment (CategoryService categoryService, CategoryTypeService categoryTypeService, InputUtilities inputUtilities)
 		{
@@ -38,10 +37,22 @@ namespace BudgetTracker
 			RecyclerView.LayoutManager categoriesLayoutManager = new LinearLayoutManager (this.Activity);
 			categoriesRecyclerView.SetLayoutManager (categoriesLayoutManager);
 
-			RecyclerView.Adapter categoriesAdapter = new CategoriesAdapter (this.categoryService, this.categoryTypeService, this.inputUtilities);
+			this.categoriesAdapter = new CategoriesAdapter (this.categories, this.categoryTypeService, this.inputUtilities);
 			categoriesRecyclerView.SetAdapter (categoriesAdapter);
 
+			this.categoryService.RetrieveCategories().ContinueWith ((categoryResult) => {
+				this.categories = categoryResult.Result;
+				this.UpdateAdapter ();
+			});
+
 			return view;
+		}
+
+		public void UpdateAdapter ()
+		{
+			if (this.categoriesAdapter != null) {
+				this.categoriesAdapter.NotifyDataSetChanged ();
+			}
 		}
 
 		public override void OnDestroyView ()

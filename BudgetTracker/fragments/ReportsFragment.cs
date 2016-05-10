@@ -11,14 +11,13 @@ namespace BudgetTracker
 		private TransactionService transactionService;
 		private CategoryService categoryService;
 
-		public ReportsFragment () : this(new TransactionService(), new CategoryService())
+		public ReportsFragment () : this(new TransactionService())
 		{
 		}
 
-		public ReportsFragment (TransactionService transactionService, CategoryService categoryService)
+		public ReportsFragment (TransactionService transactionService)
 		{
 			this.transactionService = transactionService;
-			this.categoryService = categoryService;
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

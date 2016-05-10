@@ -1,4 +1,5 @@
 ﻿using System;
+using SQLite.Net.Attributes;
 
 namespace BudgetTracker
 {
@@ -18,6 +19,7 @@ namespace BudgetTracker
 			set;
 		}
 
+		[PrimaryKey]
 		public Guid Id {
 			get;
 			set;

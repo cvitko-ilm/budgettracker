@@ -8,6 +8,7 @@ using Android.Support.Design.Widget;
 using Android.Graphics;
 using Android.Views.InputMethods;
 using Android.Content;
+using System.Collections.Generic;
 
 namespace BudgetTracker
 {
@@ -25,16 +26,16 @@ namespace BudgetTracker
 		private InputUtilities inputUtilities;
 		private TextInputLayout amountInputLayout;
 		private TextInputLayout vendorInputLayout;
+		private List<string> categoryNames;
+		private ArrayAdapter<string> categoriesAdapter;
 
-		public TransactionEntryFragment() : this(new TransactionService(), new CategoryService(), new InputUtilities())
-		{
-		}
 
 		public TransactionEntryFragment (TransactionService transactionService, CategoryService categoryService, InputUtilities inputUtilities)
 		{
 			this.transactionService = transactionService;
 			this.categoryService = categoryService;
 			this.inputUtilities = inputUtilities;
+			this.categoryNames = new List<string> ();
 		}
 
 		public override View OnCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -49,10 +50,16 @@ namespace BudgetTracker
 			this.vendorInputLayout = view.FindViewById<TextInputLayout> (Resource.Id.vendorInputLayout);
 
 			this.categorySpinner = view.FindViewById<AppCompatSpinner> (Resource.Id.categorySpinner);
-			var categories = this.categoryService.RetrieveCategories ();
-			var categoryNames = categories.Select (x => x.Name).ToArray();
-			var categoriesAdapter = new ArrayAdapter<string> (this.Activity, Resource.Layout.support_simple_spinner_dropdown_item, categoryNames);
+
+
+			this.categoriesAdapter = new ArrayAdapter<string> (this.Activity, Resource.Layout.support_simple_spinner_dropdown_item, this.categoryNames);
 			this.categorySpinner.Adapter = categoriesAdapter;
+
+			this.categoryService.RetrieveCategories ().ContinueWith ((categoryResult) => {
+				this.categoryNames = categoryResult.Result.Select (x => x.Name).ToList ();
+				this.categoriesAdapter = new ArrayAdapter<string> (this.Activity, Resource.Layout.support_simple_spinner_dropdown_item, this.categoryNames);
+				this.Activity.RunOnUiThread (() => this.categorySpinner.Adapter = categoriesAdapter);
+			});
 
 			this.saveButton = view.FindViewById<Button> (Resource.Id.saveButton);
 
@@ -120,7 +127,7 @@ namespace BudgetTracker
 			base.OnDestroyView ();
 		}
 
-		public void SaveTransaction(object sender, EventArgs e)
+		public async void SaveTransaction(object sender, EventArgs e)
 		{
 			// hide the keyboard
 			ClearFocusAndHideKeyboard ();
@@ -129,7 +136,7 @@ namespace BudgetTracker
 			bool[] validations = new bool[] { this.ValidateVendor (), this.ValidateAmount (out amount) };
 
 			if (validations.All(x => x)) {
-				var selectedCategory = this.categoryService.RetrieveCategoryByName (this.categorySpinner.SelectedItem.ToString ());
+				var selectedCategory = await this.categoryService.RetrieveCategoryByName (this.categorySpinner.SelectedItem.ToString ());
 				Transaction transaction = new Transaction ();
 				transaction.CategoryId = selectedCategory.Id;
 				transaction.Id = Guid.NewGuid ();
