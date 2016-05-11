@@ -1,4 +1,5 @@
 ﻿using System;
+using SQLite;
 
 namespace BudgetTracker
 {
@@ -18,6 +19,7 @@ namespace BudgetTracker
 			set;
 		}
 
+		[PrimaryKey]
 		public string Id {
 			get;
 			set;

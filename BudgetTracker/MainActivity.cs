@@ -26,6 +26,9 @@ namespace BudgetTracker
 		private ITransactionService transactionService;
 		private ILog log;
 
+		private string sqliteFilename = "MyDatabase.db3";
+		private string libraryPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
+
 		#region Overrides
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
@@ -39,7 +42,7 @@ namespace BudgetTracker
 			//var azureUrl = activityMetadata.GetString(AzureUrlSettingName);
 
 			this.log = new Log();
-			this.categoryService = new MockCategoryService();
+			this.categoryService = new CategoryService(System.IO.Path.Combine (libraryPath, sqliteFilename));
 			this.transactionService = new MockTransactionService();
 			this.inputUtilities = new InputUtilities();
 
