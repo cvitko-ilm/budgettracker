@@ -20,7 +20,7 @@ namespace BudgetTracker
 		}
 
 		[PrimaryKey]
-		public Guid Id {
+		public string Id {
 			get;
 			set;
 		}

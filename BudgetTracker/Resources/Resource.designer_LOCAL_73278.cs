@@ -2757,17 +2757,8 @@ namespace BudgetTracker
 			// aapt resource value: 0x7f0b002a
 			public const int edit = 2131427370;
 			
-			// aapt resource value: 0x7f0b0033
-			public const int emptyCategories = 2131427379;
-			
-			// aapt resource value: 0x7f0b0032
-			public const int go = 2131427378;
-			
 			// aapt resource value: 0x7f0b0017
 			public const int hello = 2131427351;
-			
-			// aapt resource value: 0x7f0b0034
-			public const int missingCategories = 2131427380;
 			
 			// aapt resource value: 0x7f0b002d
 			public const int name = 2131427373;

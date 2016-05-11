@@ -1,37 +1,50 @@
 ﻿using Android.App;
-using Android.Widget;
 using Android.OS;
 using Android.Support.V4.Widget;
-using Android.Runtime;
-using Java.Lang;
 using Android.Views;
 using Android.Support.V7.App;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using System.IO;
-using SQLite;
+using SharedPCL;
 
 namespace BudgetTracker
 {
 	[Activity (Label = "BudgetTracker", MainLauncher = true, Icon = "@mipmap/icon")]
+	//[MetaData(AzureUrlSettingName, Value =" https://budgettrackerilm.azurewebsites.net/")]
 	public class MainActivity : AppCompatActivity
 	{
 		private DrawerLayout drawerLayout;
 		private NavigationView navigationView;
 
-		private int[] titleResources = new int[] { Resource.String.transactionEntry, Resource.String.categories, Resource.String.reports };
+		internal static readonly int[] titleResources = new int[] { Resource.String.transactionEntry, Resource.String.categories, Resource.String.reports };
 
 		private int currentNavigationItem = 0;
 		private const string SelectedNavigationIndex = "SelectedNavigationIndex";
 		private InputUtilities inputUtilities;
+		//private const string AzureUrlSettingName = "azureUrl";
+		private ICategoryService categoryService;
+		private ITransactionService transactionService;
+		private ILog log;
 
 		private string sqliteFilename = "MyDatabase.db3";
 		private string libraryPath = System.Environment.GetFolderPath (System.Environment.SpecialFolder.Personal);
-		private SQLiteAsyncConnection _dbConn { get; set;}
 
+		#region Overrides
 		protected override void OnCreate (Bundle savedInstanceState)
 		{
 			base.OnCreate (savedInstanceState);
+
+			// connect to Azure
+			// Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+
+			// leaving this here for people who want to try to integrate this with Azure.
+			//var activityMetadata = this.PackageManager.GetActivityInfo(this.ComponentName, Android.Content.PM.PackageInfoFlags.Activities|Android.Content.PM.PackageInfoFlags.MetaData).MetaData;
+			//var azureUrl = activityMetadata.GetString(AzureUrlSettingName);
+
+			this.log = new Log();
+			this.categoryService = new CategoryService(System.IO.Path.Combine (libraryPath, sqliteFilename));
+			this.transactionService = new MockTransactionService();
+			this.inputUtilities = new InputUtilities();
 
 			// Set our view from the "main" layout resource
 			SetContentView (Resource.Layout.Main);
@@ -49,16 +62,17 @@ namespace BudgetTracker
 			// get references to items in the view
 			this.drawerLayout = FindViewById<DrawerLayout> (Resource.Id.drawerLayout);
 			this.navigationView = FindViewById<NavigationView> (Resource.Id.nav_view);
+
+			// add an event handler for when the user attempts to navigate
 			this.navigationView.NavigationItemSelected += this.NavigateToItem;
-			this.inputUtilities = new InputUtilities ();
 
 			// set the transactions fragment to be displayed by default
 			if (savedInstanceState != null) {
 				// we just need to set the title, but not the fragment
 				this.currentNavigationItem = savedInstanceState.GetInt(SelectedNavigationIndex);
-				this.Title = this.GetString(this.titleResources [this.currentNavigationItem]);
+				this.Title = this.FindTitle(this.currentNavigationItem);
 			} else {
-				this.SetFragment (new TransactionEntryFragment (new TransactionService(), new CategoryService (GetSqliteDatabaseConn ()), this.inputUtilities), 0);
+				this.SetFragment (new TransactionEntryFragment (this.transactionService, this.categoryService, this.inputUtilities, this.log), 0);
 			}
 		}
 
@@ -83,6 +97,38 @@ namespace BudgetTracker
 			base.OnDestroy ();
 		}
 
+		public override bool OnOptionsItemSelected(IMenuItem item)
+		{
+			this.inputUtilities.HideKeyboard(this.drawerLayout);
+
+			//
+			// Other cases go here for other buttons in the ActionBar.
+			// This sample app has no other buttons. This code is a placeholder to show what would be needed if there were other buttons.
+			//
+			switch (item.ItemId)
+			{
+				case Android.Resource.Id.Home:
+					if (this.drawerLayout.IsDrawerOpen(GravityCompat.Start))
+					{
+						this.drawerLayout.CloseDrawer(GravityCompat.Start);
+					}
+					else
+					{
+						this.drawerLayout.OpenDrawer(GravityCompat.Start);
+					}
+
+					return true;
+			}
+
+			return base.OnOptionsItemSelected(item);
+		}
+		#endregion
+
+		/// <summary>
+		/// Navigates to the selected fragment.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
 		protected void NavigateToItem(object sender, NavigationView.NavigationItemSelectedEventArgs e)
 		{
 			e.MenuItem.SetChecked (true);
@@ -92,16 +138,16 @@ namespace BudgetTracker
 			switch (e.MenuItem.ItemId)
 			{
 				case Resource.Id.nav_reports:
-					fragment = new ReportsFragment (new TransactionService());
+					fragment = new ReportsFragment (this.transactionService, this.categoryService, this.log);
 					this.currentNavigationItem = 2;
 					break;
 				case Resource.Id.nav_categories:
-				fragment = new CategoriesFragment (new CategoryService (GetSqliteDatabaseConn ()), new CategoryTypeService (), this.inputUtilities);
+				fragment = new CategoriesFragment (this.categoryService, new CategoryTypeService (), this.inputUtilities, this.log);
 					this.currentNavigationItem = 1;
 					break;
 				case Resource.Id.nav_transactions:
 				default:
-				fragment = new TransactionEntryFragment (new TransactionService(), new CategoryService (GetSqliteDatabaseConn ()), this.inputUtilities);
+				fragment = new TransactionEntryFragment (this.transactionService, this.categoryService, this.inputUtilities, this.log);
 					this.currentNavigationItem = 0;
 					break;
 			}
@@ -111,44 +157,25 @@ namespace BudgetTracker
 			drawerLayout.CloseDrawers ();
 		}
 
-		public override bool OnOptionsItemSelected(IMenuItem item)
-		{
-			this.inputUtilities.HideKeyboard (this.drawerLayout);
-
-			//
-			// Other cases go here for other buttons in the ActionBar.
-			// This sample app has no other buttons. This code is a placeholder to show what would be needed if there were other buttons.
-			//
-			switch (item.ItemId)
-			{
-			case Android.Resource.Id.Home:
-				if (this.drawerLayout.IsDrawerOpen (GravityCompat.Start)) 
-				{
-					this.drawerLayout.CloseDrawer (GravityCompat.Start);
-				} 
-				else 
-				{
-					this.drawerLayout.OpenDrawer (GravityCompat.Start);
-				}
-
-				return true;
-			}
-
-			return base.OnOptionsItemSelected(item);
-		}
-
+		/// <summary>
+		/// Sets the currently displayed fragment.
+		/// </summary>
+		/// <param name="fragment">The fragment.</param>
+		/// <param name="index">The fragment index.</param>
 		private void SetFragment(Fragment fragment, int index)
 		{
-			this.FragmentManager.BeginTransaction ().Replace (Resource.Id.frameLayout, fragment).Commit ();
-			this.Title = this.GetString(this.titleResources [index]);
+			this.FragmentManager.BeginTransaction ().Replace (Resource.Id.frameLayout, fragment).AddToBackStack(null).Commit ();
+			this.Title = this.FindTitle(index);
 		}
 
-		private SQLiteAsyncConnection GetSqliteDatabaseConn()
+		/// <summary>
+		/// Retrieves the title that should be used given the current fragment index.
+		/// </summary>
+		/// <returns>The title.</returns>
+		/// <param name="index">The index to be used in the list of titles.</param>
+		private string FindTitle(int index)
 		{
-			if (_dbConn == null) {
-				_dbConn = new SQLiteAsyncConnection (Path.Combine (libraryPath, sqliteFilename));
-			}
-			return _dbConn;
+			return GetString(MainActivity.titleResources[this.currentNavigationItem]);
 		}
 	}
 }

@@ -8,7 +8,8 @@ namespace BudgetTracker
 		{
 		}
 
-		public Guid Id {
+		public string Id
+		{
 			get;
 			set;
 		}
@@ -18,7 +19,7 @@ namespace BudgetTracker
 			set;
 		}
 
-		public Guid CategoryId {
+		public string CategoryId {
 			get;
 			set;
 		}
