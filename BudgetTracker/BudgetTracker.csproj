@@ -142,5 +142,9 @@
       <Project>{8A671289-B506-4AB7-8E5D-963025979446}</Project>
       <Name>SharedPCL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BudgetTracker.Data\BudgetTracker.Data.csproj">
+      <Project>{915C2209-E13D-4B11-AC69-F02EDD8920C0}</Project>
+      <Name>BudgetTracker.Data</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
