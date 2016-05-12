@@ -84,7 +84,6 @@
     <Compile Include="utilities\SnackbarCallback.cs" />
     <Compile Include="fragments\TransactionEntryFragment.cs" />
     <Compile Include="utilities\Log.cs" />
-    <Compile Include="services\MockCategoryService.cs" />
     <Compile Include="services\MockTransactionService.cs" />
   </ItemGroup>
   <ItemGroup>
