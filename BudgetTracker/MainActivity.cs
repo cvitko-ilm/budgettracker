@@ -28,7 +28,7 @@ namespace BudgetTracker
             this.inputUtilities = new InputUtilities();
 
             TinyIoCContainer.Current.Register<ILog>(new Log());
-            TinyIoCContainer.Current.Register<ICategoryService>(new MockCategoryService());
+            TinyIoCContainer.Current.Register<ICategoryService>(new CategoryService());
             TinyIoCContainer.Current.Register<ICategoryTypeService>(new MockCategoryTypeService());
             TinyIoCContainer.Current.Register<ITransactionService>(new MockTransactionService());
             TinyIoCContainer.Current.Register<InputUtilities>(this.inputUtilities);
